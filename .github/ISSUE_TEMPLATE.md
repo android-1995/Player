@@ -14,3 +14,4 @@ Windows, Linux, Android, ...
  - The `easyrpg_log.txt` log file (you can find it in the game directory)
 
 #### Describe the issue in detail and how to reproduce it:
+
