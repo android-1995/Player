@@ -14,9 +14,6 @@ include(PlayerBuildType)
 include(PlayerMisc)
 include(GetGitRevisionDescription)
 
-# Dependencies provided by CMake Presets
-list(APPEND CMAKE_PREFIX_PATH "${PLAYER_PREFIX_PATH_APPEND}")
-
 # C++17 is required
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -24,6 +21,13 @@ set(CMAKE_CXX_EXTENSIONS ON)
 
 # Must be at global scope, otherwise breaks -DPLAYER_BUILD_LIBLCF (see CMP0077)
 option(BUILD_SHARED_LIBS "Build shared easyrpg_libretro core" ON)
+
+option(BUILD_CLIENT "Build client" ON)
+option(BUILD_SERVER "Build server" OFF)
+
+if(NOT BUILD_CLIENT AND NOT BUILD_SERVER)
+	set(BUILD_CLIENT on)
+endif()
 
 option(CMAKE_FIND_PACKAGE_PREFER_CONFIG "Prefer config files over bundled FindXXX files. Set this to OFF when configuration fails and report a bug." ON)
 
@@ -540,6 +544,12 @@ set_property(CACHE PLAYER_TARGET_PLATFORM PROPERTY STRINGS SDL2 SDL1 libretro ps
 set(PLAYER_BUILD_EXECUTABLE ON)
 set(PLAYER_TEST_LIBRARIES ${PROJECT_NAME})
 
+if(NOT BUILD_CLIENT AND BUILD_SERVER)
+	set(PLAYER_TARGET_PLATFORM OFF)
+	set(PLAYER_BUILD_EXECUTABLE OFF)
+	set(PLAYER_AUDIO_BACKEND OFF)
+endif()
+
 if(ANDROID AND PLAYER_GRADLE_BUILD)
 	# Build invoked by Gradle
 	# Ugly: Gradle has no way to branch based on the ABI
@@ -692,8 +702,6 @@ elseif(${PLAYER_TARGET_PLATFORM} STREQUAL "amigaos4")
 		src/platform/sdl/axis.h
 		src/platform/sdl/sdl_ui.cpp
 		src/platform/sdl/sdl_ui.h)
-else()
-	message(FATAL_ERROR "Invalid target platform")
 endif()
 
 # Shared by homebrew platforms
@@ -807,6 +815,12 @@ set(CMAKE_XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "org.easyrpg.player")
 option(PLAYER_BUILD_LIBLCF "Instead of detecting liblcf, clone liblcf into lib/liblcf and build it along with the Player. This is convenient for development." OFF)
 set(PLAYER_BUILD_LIBLCF_GIT "https://github.com/EasyRPG/liblcf.git" CACHE STRING "Git repository of liblcf to clone. Requires PLAYER_BUILD_LIBLCF=ON.")
 set(PLAYER_BUILD_LIBLCF_BRANCH "master" CACHE STRING "Branch of the liblcf repository to clone. Requires PLAYER_BUILD_LIBLCF=ON.")
+
+# build libs
+option(PLAYER_BUILD_LIBS "Clone all libs into lib/ and built it along with the Player." OFF)
+if(PLAYER_BUILD_LIBS)
+	set(PLAYER_BUILD_LIBLCF ON)
+endif()
 
 if(PLAYER_BUILD_LIBLCF)
 	# liblcf is built as part of this cmake file
@@ -1106,6 +1120,10 @@ if(${PLAYER_BUILD_EXECUTABLE} AND ${PLAYER_TARGET_PLATFORM} MATCHES "^SDL(1|2)$"
 		target_sources(${EXE_NAME} PRIVATE
 			resources/windows/player.manifest
 			"${CMAKE_CURRENT_BINARY_DIR}/resources/windows/player.rc")
+		if(MSVC)
+			target_link_options(${EXE_NAME} PUBLIC /DEBUG:FULL)
+			message(STATUS "x64dbg: Add x64dbg source file viewing support")
+		endif()
 
 		# Set Visual Studio startup project
 		set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${EXE_NAME})

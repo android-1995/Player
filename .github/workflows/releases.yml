@@ -1,0 +1,66 @@
+# Settings (See .../settings/secrets/actions)
+# +- secrets: APK_KEY_ALIAS, APK_KEY_PASSWORD, APK_STORE_FILE_B64
+# +- variables: TOOLCHAIN_RELEASE_NAME
+
+name: Releases
+
+on: [push, pull_request]
+
+jobs:
+  android:
+    name: android
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        abi:
+          - armeabi-v7a
+#          - arm64-v8a
+
+    env:
+      FILENAME: "Android-build-${{ github.ref_name }}"
+
+    steps:
+      - name: Setup JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'oracle'
+          java-version: '17'
+
+      - name: Clone Repository
+        uses: actions/checkout@v2
+        if: github.event.inputs.git-ref == ''
+
+      - name: Setup Toolchain
+        run: |
+          aria2c -o tmp.tar.gz \
+            "https://github.com/${{ github.repository_owner }}/Player/releases/download/${{ vars.TOOLCHAIN_RELEASE_NAME }}/android_toolchain.tar.gz"
+          mkdir -p toolchain && tar xf tmp.tar.gz -C toolchain
+
+      - name: Decode Base64 Keystore
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: 'keystore'
+          fileDir: './'
+          encodedString: ${{ secrets.APK_STORE_FILE_B64 }}
+
+      - name: Compile
+        env:
+          ORG_GRADLE_PROJECT_RELEASE_STORE_FILE: ${{ github.workspace }}/keystore
+          ORG_GRADLE_PROJECT_RELEASE_STORE_PASSWORD: ${{ secrets.APK_KEY_PASSWORD }}
+          ORG_GRADLE_PROJECT_RELEASE_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
+          ORG_GRADLE_PROJECT_RELEASE_KEY_PASSWORD: ${{ secrets.APK_KEY_PASSWORD }}
+          ORG_GRADLE_PROJECT_ABI_FILTERS_RELEASE: ${{ matrix.abi }}
+        run: |
+          cd builds/android
+          ./gradlew -PtoolchainDirs="${{ github.workspace }}/toolchain" \
+            -PcmakeOptions="-DPLAYER_BUILD_LIBS=on -DCMAKE_BUILD_TYPE=Release" \
+            assembleRelease
+          cp -v app/build/outputs/apk/release/app-release.apk \
+            ${{ github.workspace }}/${{ env.FILENAME }}.apk
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{ env.FILENAME }}
+          path: ${{ github.workspace }}/${{ env.FILENAME }}.apk
