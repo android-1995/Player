@@ -34,6 +34,12 @@ JNIEXPORT void JNICALL Java_org_easyrpg_player_player_EasyRpgPlayerActivity_setF
 JNIEXPORT void JNICALL
 Java_org_easyrpg_player_player_EasyRpgPlayerActivity_openSettings(JNIEnv *, jclass);
 
+//region 修改
+JNIEXPORT void JNICALL Java_org_easyrpg_player_player_EasyRpgPlayerActivity_pauseGame
+  (JNIEnv *, jclass);
+JNIEXPORT void JNICALL Java_org_easyrpg_player_player_EasyRpgPlayerActivity_resumeGame
+  (JNIEnv *, jclass);
+//endregion 修改
 #ifdef __cplusplus
 }
 #endif

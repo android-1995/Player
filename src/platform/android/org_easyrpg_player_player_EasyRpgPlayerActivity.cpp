@@ -55,6 +55,19 @@ Java_org_easyrpg_player_player_EasyRpgPlayerActivity_openSettings(JNIEnv *, jcla
 	});
 }
 
+//region 修改
+JNIEXPORT void JNICALL Java_org_easyrpg_player_player_EasyRpgPlayerActivity_pauseGame
+  (JNIEnv *, jclass)
+{
+	Player::Pause();
+}
+
+JNIEXPORT void JNICALL Java_org_easyrpg_player_player_EasyRpgPlayerActivity_resumeGame
+  (JNIEnv *, jclass)
+{
+	Player::Resume();
+}
+//endregion
 #ifdef __cplusplus
 }
 #endif
