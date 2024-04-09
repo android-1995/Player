@@ -60,36 +60,36 @@ enum class StartupLogos {
 struct Game_ConfigPlayer {
 	StringConfigParam autobattle_algo{ "", "", "", "", "" };
 	StringConfigParam enemyai_algo{ "", "", "", "", "" };
-	BoolConfigParam settings_autosave{ "Save settings on exit", "Automatically save the settings on exit", "Player", "SettingsAutosave", false };
-	BoolConfigParam settings_in_title{ "Show settings on title screen", "Display settings menu item on the title screen", "Player", "SettingsInTitle", false };
-	BoolConfigParam settings_in_menu{ "Show settings in menu", "Display settings menu item on the menu screen", "Player", "SettingsInMenu", false };
+	BoolConfigParam settings_autosave{ "退出时保存设置", "退出时设置自动保存", "Player", "SettingsAutosave", false };
+	BoolConfigParam settings_in_title{ "在起始标题显示设置", "在起始标题屏幕上显示设置菜单项", "Player", "SettingsInTitle", false };
+	BoolConfigParam settings_in_menu{ "在菜单中显示设置", "在菜单屏幕上显示设置菜单项", "Player", "SettingsInMenu", false };
 	EnumConfigParam<StartupLogos, 3> show_startup_logos{
-		"Startup Logos", "Logos that are displayed on startup", "Player", "StartupLogos", StartupLogos::Custom,
-		Utils::MakeSvArray("None", "Custom", "All"),
+		"启动标志", "启动时显示的标志", "Player", "StartupLogos", StartupLogos::Custom,
+		Utils::MakeSvArray("无", "自定义", "全部"),
 		Utils::MakeSvArray("none", "custom", "all"),
-		Utils::MakeSvArray("Do not show any additional logos", "Show custom logos bundled with the game", "Show all logos, including the original from RPG Maker")};
+		Utils::MakeSvArray("不显示任何标志", "显示与游戏绑定的自定义标志", "显示所有标志，包括RPG Maker的标志")};
 
 	void Hide();
 };
 
 struct Game_ConfigVideo {
-	LockedConfigParam<std::string> renderer{ "Renderer", "The rendering engine", "auto" };
-	BoolConfigParam vsync{ "V-Sync", "Toggle V-Sync mode (Recommended: ON)", "Video", "Vsync", true };
-	BoolConfigParam fullscreen{ "Fullscreen", "Toggle between fullscreen and window mode", "Video", "Fullscreen", true };
-	BoolConfigParam show_fps{ "Show FPS", "Toggle display of the FPS counter", "Video", "ShowFps", false };
-	BoolConfigParam fps_render_window{ "Show FPS in Window", "Show FPS inside the window when in window mode", "Video", "FpsRenderWindow", false };
-	RangeConfigParam<int> fps_limit{ "Frame Limiter", "Toggle the frames per second limit (Recommended: 60)", "Video", "FpsLimit", DEFAULT_FPS, 0, 99999 };
+	LockedConfigParam<std::string> renderer{ "渲染", "渲染引擎", "auto" };
+	BoolConfigParam vsync{ "垂直同步", "垂直同步(建议：开启)", "Video", "Vsync", true };
+	BoolConfigParam fullscreen{ "全屏", "切换全屏模式和窗口模式", "Video", "Fullscreen", true };
+	BoolConfigParam show_fps{ "显示FPS", "切换帧率计数器的显示", "Video", "ShowFps", false };
+	BoolConfigParam fps_render_window{ "在窗口中显示FPS", "在窗口模式下显示窗口内的FPS", "Video", "FpsRenderWindow", false };
+	RangeConfigParam<int> fps_limit{ "帧限制器", "修改每秒帧数限制（建议：60）", "Video", "FpsLimit", DEFAULT_FPS, 0, 99999 };
 	ConfigParam<int> window_zoom{ "Window Zoom", "Toggle the window zoom level", "Video", "WindowZoom", 2 };
-	EnumConfigParam<ScalingMode, 3> scaling_mode{ "Scaling method", "How the output is scaled", "Video", "ScalingMode", ScalingMode::Nearest,
+	EnumConfigParam<ScalingMode, 3> scaling_mode{ "屏幕缩放", "输出画面的缩放方式", "Video", "ScalingMode", ScalingMode::Nearest,
 		Utils::MakeSvArray("Nearest", "Integer", "Bilinear"),
 		Utils::MakeSvArray("nearest", "integer", "bilinear"),
-		Utils::MakeSvArray("Scale to screen size (Causes scaling artifacts)", "Scale to multiple of the game resolution", "Like Nearest, but output is blurred to avoid artifacts")};
-	BoolConfigParam stretch{ "Stretch", "Stretch to the width of the window/screen", "Video", "Stretch", false };
+		Utils::MakeSvArray("缩放到屏幕大小(可能导致缩放瑕疵)", "缩放到游戏分辨率的倍数", "类似Nearest,但画面是模糊的以避免瑕疵")};
+	BoolConfigParam stretch{ "拉伸", "拉伸到屏幕的宽度", "Video", "Stretch", false };
 	BoolConfigParam touch_ui{ "Touch Ui", "Display the touch ui", "Video", "TouchUi", true };
-	EnumConfigParam<GameResolution, 3> game_resolution{ "Resolution", "Game resolution. Changes require a restart.", "Video", "GameResolution", GameResolution::Original,
-		Utils::MakeSvArray("Original (Recommended)", "Widescreen (Experimental)", "Ultrawide (Experimental)"),
+	EnumConfigParam<GameResolution, 3> game_resolution{ "分辨率", "游戏分辨率,可能重启才能生效", "Video", "GameResolution", GameResolution::Original,
+		Utils::MakeSvArray("原始(推荐)", "宽屏(实验)", "超宽(实验)"),
 		Utils::MakeSvArray("original", "widescreen", "ultrawide"),
-		Utils::MakeSvArray("The default resolution (320x240, 4:3)", "Can cause glitches (416x240, 16:9)", "Can cause glitches (560x240, 21:9)")};
+		Utils::MakeSvArray("默认分辨率(320x240, 4:3)", "可能导致故障(416x240, 16:9)", "可能导致故障(560x240, 21:9)")};
 
 	// These are never shown and are used to restore the window to the previous position
 	ConfigParam<int> window_x{ "", "", "Video", "WindowX", -1 };
@@ -101,18 +101,18 @@ struct Game_ConfigVideo {
 };
 
 struct Game_ConfigAudio {
-	RangeConfigParam<int> music_volume{ "BGM Volume", "Volume of the background music", "Audio", "MusicVolume", 100, 0, 100 };
-	RangeConfigParam<int> sound_volume{ "SFX Volume", "Volume of the sound effects", "Audio", "SoundVolume", 100, 0, 100 };
+	RangeConfigParam<int> music_volume{ "背景音量", "背景音乐音量", "Audio", "MusicVolume", 100, 0, 100 };
+	RangeConfigParam<int> sound_volume{ "音效音量", "音效音量", "Audio", "SoundVolume", 100, 0, 100 };
 
 	void Hide();
 };
 
 struct Game_ConfigInput {
-	RangeConfigParam<int> speed_modifier_a{ "Fast Forward A: Speed", "Set fast forward A speed", "Input", "SpeedModifierA", 3, 2, 100 };
-	RangeConfigParam<int> speed_modifier_b{ "Fast Forward B: Speed", "Set fast forward B speed", "Input", "SpeedModifierB", 10, 2, 100 };
-	BoolConfigParam gamepad_swap_analog{ "Gamepad: Swap Analog Sticks", "Swap left and right stick", "Input", "GamepadSwapAnalog", false };
-	BoolConfigParam gamepad_swap_dpad_with_buttons{ "Gamepad: Swap D-Pad with buttons", "Swap D-Pad with ABXY-Buttons", "Input", "GamepadSwapDpad", false };
-	BoolConfigParam gamepad_swap_ab_and_xy{ "Gamepad: Swap AB and XY", "Swap A and B with X and Y", "Input", "GamepadSwapAbxy", false };
+	RangeConfigParam<int> speed_modifier_a{ "游戏加速 A", "设置游戏加速A的速度", "Input", "SpeedModifierA", 3, 2, 100 };
+	RangeConfigParam<int> speed_modifier_b{ "游戏加速 B", "设置游戏加速B的速度", "Input", "SpeedModifierB", 10, 2, 100 };
+	BoolConfigParam gamepad_swap_analog{ "Gamepad:交换摇杆", "交换左右摇杆", "Input", "GamepadSwapAnalog", false };
+	BoolConfigParam gamepad_swap_dpad_with_buttons{ "Gamepad:用按钮替换方向键", "用ABXY按钮替换方向键", "Input", "GamepadSwapDpad", false };
+	BoolConfigParam gamepad_swap_ab_and_xy{ "Gamepad:替换AB和XY", "用X和Y替换A和B", "Input", "GamepadSwapAbxy", false };
 	Input::ButtonMappingArray buttons;
 
 	void Hide();

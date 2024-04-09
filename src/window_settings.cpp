@@ -375,7 +375,7 @@ void Window_Settings::RefreshLicense() {
 void Window_Settings::RefreshInput() {
 	Game_ConfigInput& cfg = Input::GetInputSource()->GetConfig();
 
-	AddOption(MenuItem("Key/Button mapping", "Change the keybindings", ""),
+	AddOption(MenuItem("按键映射", "更改按键映射", ""),
 		[this]() { Push(eInputButtonCategory); });
 	AddOption(cfg.gamepad_swap_ab_and_xy, [&cfg](){ cfg.gamepad_swap_ab_and_xy.Toggle(); Input::ResetTriggerKeys(); });
 	AddOption(cfg.gamepad_swap_analog, [&cfg](){ cfg.gamepad_swap_analog.Toggle(); Input::ResetTriggerKeys(); });
@@ -385,11 +385,11 @@ void Window_Settings::RefreshInput() {
 }
 
 void Window_Settings::RefreshButtonCategory() {
-	AddOption(MenuItem("Game", "Buttons used by games", ""),
+	AddOption(MenuItem("游戏", "游戏使用的按键", ""),
 		[this]() { Push(eInputListButtonsGame, 0); });
-	AddOption(MenuItem("Engine", "Buttons to access engine features", ""),
+	AddOption(MenuItem("引擎", "访问引擎功能的按键", ""),
 		[this]() { Push(eInputListButtonsEngine, 1); });
-	AddOption(MenuItem("Developer", "Buttons useful for developers", ""),
+	AddOption(MenuItem("开发者", "对开发人员有用的按键", ""),
 		[this]() { Push(eInputListButtonsDeveloper, 2); });
 }
 

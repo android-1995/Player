@@ -61,16 +61,16 @@ void Scene_Settings::CreateTitleGraphic() {
 
 void Scene_Settings::CreateMainWindow() {
 	std::vector<std::string> options = {
-		"Video",
-		"Audio",
-		"Input",
-		"Engine",
-		"License",
-		"<Save Settings>"
+		"视频",
+		"音频",
+		"输入",
+		"系统",
+		"许可证",
+		"<保存设置>"
 	};
 
 	if (Scene::Find(Scene::Title)) {
-		options.push_back("<Exit Game>");
+		options.push_back("<退出游戏>");
 	}
 
 	main_window = std::make_unique<Window_Command>(std::move(options));
@@ -94,18 +94,18 @@ void Scene_Settings::CreateOptionsWindow() {
 	input_window = std::make_unique<Window_InputSettings>(Player::menu_offset_x, 32, MENU_WIDTH, Player::screen_height - 32 * 3);
 	input_window->SetHelpWindow(help_window.get());
 
-	std::vector<std::string> input_mode_items = {"Add", "Remove", "Reset"};
+	std::vector<std::string> input_mode_items = {"新增", "删除", "重置"};
 	input_mode_window = std::make_unique<Window_Command_Horizontal>(input_mode_items, MENU_WIDTH - 32 * 2);
 	input_mode_window->SetX(Player::menu_offset_x + 32);
 	input_mode_window->SetY(Player::screen_height - 32);
 	input_mode_window->SetHelpWindow(help_window.get());
 	input_mode_window->UpdateHelpFn = [](Window_Help& win, int index) {
 		if (index == 0) {
-			win.SetText("Add a new keybinding");
+			win.SetText("新增按键绑定");
 		} else if (index == 1) {
-			win.SetText("Remove a keybinding");
+			win.SetText("删除按键绑定");
 		} else if (index == 2) {
-			win.SetText("Reset the keybindings to the default");
+			win.SetText("重置为默认映射");
 		}
 	};
 
@@ -158,7 +158,7 @@ void Scene_Settings::SetMode(Window_Settings::UiMode new_mode) {
 			input_mode_window->SetActive(true);
 			input_mode_window->SetVisible(true);
 			input_help_window->SetVisible(true);
-			input_help_window->SetText("Emergency reset: Hold 4 keys and follow instructions");
+			input_help_window->SetText("紧急重置：按住任意4个键并根据提示操作");
 			RefreshInputActionAllowed();
 			break;
 		case Window_Settings::eInputButtonAdd:
@@ -167,7 +167,7 @@ void Scene_Settings::SetMode(Window_Settings::UiMode new_mode) {
 			input_window->SetInputButton(static_cast<Input::InputButton>(options_window->GetFrame().arg));
 			input_mode_window->SetVisible(true);
 			input_help_window->SetVisible(true);
-			input_help_window->SetText("Press a key to bind. To abort the mapping wait 3 seconds");
+			input_help_window->SetText("按键绑定，3秒钟后停止映射");
 			break;
 		case Window_Settings::eInputButtonRemove:
 			help_window->SetVisible(true);
@@ -176,7 +176,7 @@ void Scene_Settings::SetMode(Window_Settings::UiMode new_mode) {
 			input_window->SetIndex(0);
 			input_mode_window->SetVisible(true);
 			input_help_window->SetVisible(true);
-			input_help_window->SetText("Select the keybinding you want to remove");
+			input_help_window->SetText("选择要删除的按键绑定");
 			break;
 		case Window_Settings::eAbout:
 			about_window->SetVisible(true);
@@ -364,7 +364,7 @@ void Scene_Settings::UpdateOptions() {
 				number_window->SetZ(options_window->GetZ() + 1);
 				number_window->SetOpacity(255);
 				number_window->SetActive(true);
-				help_window->SetText(fmt::format("Input a value from {} to {}", option.min_value, option.max_value));
+				help_window->SetText(fmt::format("输入值从{}到{}", option.min_value, option.max_value));
 				options_window->SetActive(false);
 			} else if (option.mode == Window_Settings::eOptionPicker) {
 				picker_window.reset(new Window_Command(option.options_text));
@@ -515,29 +515,29 @@ void Scene_Settings::UpdateButtonRemove() {
 bool Scene_Settings::RefreshInputEmergencyReset() {
 	if (Input::GetAllRawPressed().count() >= 4) {
 		if (input_reset_counter == 0) {
-			Output::InfoStr("Input emergency reset started");
-			Output::InfoStr("Hold the keys for 3 seconds");
+			Output::InfoStr("输入的紧急重置已开始");
+			Output::InfoStr("按住按键3秒钟");
 		}
 		input_reset_counter++;
 
 		if (input_reset_counter == Game_Clock::GetTargetGameFps() * 3) {
 			if (input_window->GetInputButton() == Input::InputButton::BUTTON_COUNT) {
 				// No last button yet: reset everything
-				Output::InfoStr("All buttons reset to default");
+				Output::InfoStr("所有按键已重置到默认");
 				if (input_window->GetActive()) {
 					input_window->SetIndex(0);
 				}
 				Input::ResetAllMappings();
 			} else {
-				Output::Info("Button {} reset to default", Input::kInputButtonNames.tag(input_window->GetInputButton()));
-				Output::Info("To reset all buttons hold 3 seconds longer");
+				Output::Info("按键{}已重置到默认", Input::kInputButtonNames.tag(input_window->GetInputButton()));
+				Output::Info("要重置所有按键，请再按住3秒钟");
 				if (input_window->GetActive()) {
 					input_window->SetIndex(0);
 				}
 				input_window->ResetMapping();
 			}
 		} else if (input_reset_counter == Game_Clock::GetTargetGameFps() * 6) {
-			Output::InfoStr("All buttons reset to default");
+			Output::InfoStr("所有按键已重置到默认");
 			if (input_window->GetActive()) {
 				input_window->SetIndex(0);
 			}
@@ -545,7 +545,7 @@ bool Scene_Settings::RefreshInputEmergencyReset() {
 		}
 	} else {
 		if (input_reset_counter > 0) {
-			Output::InfoStr("Input emergency reset ended");
+			Output::InfoStr("输入的紧急重置已结束");
 			input_reset_counter = 0;
 		}
 	}
@@ -583,9 +583,9 @@ bool Scene_Settings::SaveConfig(bool silent) {
 	AsyncHandler::SaveFilesystem();
 
 	if (silent) {
-		Output::Debug("Configuration saved to {}", cfg_out.GetName());
+		Output::Debug("配置已保存到{}", cfg_out.GetName());
 	} else {
-		Output::Info("Configuration saved to {}", cfg_out.GetName());
+		Output::Info("配置已保存到{}", cfg_out.GetName());
 	}
 
 	return true;

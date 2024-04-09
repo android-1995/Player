@@ -88,14 +88,14 @@ Game_ConfigVideo BaseUi::GetConfig() const {
 	if (cfg.fullscreen.IsOptionVisible()) {
 		cfg.fps_render_window.SetLocked(cfg.fullscreen.Get());
 		if (cfg.fps_render_window.IsLocked()) {
-			cfg.fps_render_window.SetDescription("This options requires to be in windowed mode");
+			cfg.fps_render_window.SetDescription("此选项需要处于窗口模式");
 		}
 	}
 
 	if (cfg.vsync.IsOptionVisible()
 			&& cfg.vsync.Get()) {
 		cfg.fps_limit.SetLocked(true);
-		cfg.fps_limit.SetDescription("This option requires V-Sync to be disabled");
+		cfg.fps_limit.SetDescription("此选项要求禁用垂直同步");
 	}
 
 	if (cfg.fullscreen.IsOptionVisible()

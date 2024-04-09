@@ -506,22 +506,22 @@ void Scene_Debug::UpdateRangeListWindow() {
 	switch (mode) {
 		case eMain:
 			if (range_page == 0) {
-				addItem("Save", !is_battle);
-				addItem("Load");
-				addItem("Switches");
-				addItem("Variables");
+				addItem("保存存档", !is_battle);
+				addItem("加载存档");
+				addItem("开关");
+				addItem("变量");
 				addItem(lcf::Data::terms.gold.c_str());
-				addItem("Items");
-				addItem("Battle", !is_battle);
-				addItem("Goto Map", !is_battle);
-				addItem("Full Heal");
-				addItem("Level");
+				addItem("物品");
+				addItem("战斗", !is_battle);
+				addItem("跳转地图", !is_battle);
+				addItem("满血");
+				addItem("等级");
 			} else {
-				addItem("Move Speed", !is_battle);
-				addItem("Call ComEvent");
-				addItem("Call MapEvent", Scene::Find(Scene::Map) != nullptr);
-				addItem("Call BtlEvent", is_battle);
-				addItem("Open Menu", !is_battle);
+				addItem("移动速度", !is_battle);
+				addItem("呼叫公共事件");
+				addItem("呼叫地图事件", Scene::Find(Scene::Map) != nullptr);
+				addItem("呼叫战斗事件", is_battle);
+				addItem("打开菜单", !is_battle);
 			}
 			break;
 		case eSwitch:
@@ -539,11 +539,11 @@ void Scene_Debug::UpdateRangeListWindow() {
 		case eMap:
 			if (GetStackSize() > 3) {
 				if (GetStackSize() > 4) {
-					addItem("Map: " + std::to_string(GetFrame(2).value));
+					addItem("地图: " + std::to_string(GetFrame(2).value));
 					addItem("X: " + std::to_string(GetFrame(1).value));
 					addItem("Y: ");
 				} else {
-					addItem("Map: " + std::to_string(GetFrame(1).value));
+					addItem("地图: " + std::to_string(GetFrame(1).value));
 					addItem("X: ");
 				}
 			} else {
@@ -577,14 +577,14 @@ void Scene_Debug::UpdateRangeListWindow() {
 			}
 			break;
 		case eFullHeal:
-			addItem("Full Heal");
+			addItem("满血");
 			break;
 		case eLevel:
-			addItem("Level");
+			addItem("等级");
 			break;
 		case eMoveSpeed:
-			addItem("Move Speed");
-			addItem("Range: 1-7");
+			addItem("移动速度");
+			addItem("范围: 1-7");
 			break;
 		case eCallBattleEvent:
 			if (is_battle) {

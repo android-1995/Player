@@ -346,7 +346,7 @@ public:
 	}
 
 	std::string ValueToString() const override {
-		return Get() ? "[ON]" : "[OFF]";
+		return Get() ? "[开]" : "[关]";
 	}
 };
 
