@@ -27,6 +27,7 @@
 #include "player.h"
 #include "baseui.h"
 #include "scene_settings.h"
+#include "game_clock.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -76,6 +77,16 @@ JNIEXPORT jboolean JNICALL Java_org_easyrpg_player_player_EasyRpgPlayerActivity_
   (JNIEnv *, jclass)
 {
 	return Player::through_flag_25;
+}
+JNIEXPORT void JNICALL Java_org_easyrpg_player_player_EasyRpgPlayerActivity_setGameSpeedFactor
+  (JNIEnv *, jclass, jfloat speed)
+{
+	Game_Clock::SetGameSpeedFactor(speed);
+}
+JNIEXPORT jfloat JNICALL Java_org_easyrpg_player_player_EasyRpgPlayerActivity_getGameSpeedFactor
+  (JNIEnv *, jclass)
+{
+	return Game_Clock::GetGameSpeedFactor();
 }
 //endregion
 #ifdef __cplusplus
