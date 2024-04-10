@@ -68,6 +68,11 @@ JNIEXPORT void JNICALL Java_org_easyrpg_player_player_EasyRpgPlayerActivity_resu
 {
 	Player::Resume();
 }
+JNIEXPORT void JNICALL Java_org_easyrpg_player_player_EasyRpgPlayerActivity_resetGame
+  (JNIEnv *, jclass)
+{
+	Player::reset_flag = true;
+}
 JNIEXPORT void JNICALL Java_org_easyrpg_player_player_EasyRpgPlayerActivity_switchWalkThroughWalls
   (JNIEnv *, jclass, jboolean enabled)
 {
