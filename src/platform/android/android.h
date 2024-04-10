@@ -30,19 +30,24 @@ namespace EpAndroid {
 			return;
 		}
 
-		android_mutex.lock();
+		std::lock_guard<std::mutex> lock(android_mutex);
+//		android_mutex.lock();
 		if (android_fn) {
 			android_fn();
 			android_fn = nullptr;
 		}
-		android_mutex.unlock();
+//		android_mutex.unlock();
 	}
 
-	template<typename F>
-	inline void schedule(F&& fn) {
-		android_mutex.lock();
-		android_fn = std::move(fn);
-		android_mutex.unlock();
+	template<typename F, typename... Args>
+	inline void schedule(F&& fn, Args&&... args) {
+	    std::lock_guard<std::mutex> lock(android_mutex);
+		android_fn = [fn = std::forward<F>(fn), args...]() mutable {
+        	fn(std::forward<Args>(args)...);
+        };
+//		android_mutex.lock();
+//		android_fn = std::move(fn);
+//		android_mutex.unlock();
 	}
 }
 

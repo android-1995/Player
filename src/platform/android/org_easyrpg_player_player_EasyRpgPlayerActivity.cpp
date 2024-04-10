@@ -28,6 +28,7 @@
 #include "baseui.h"
 #include "scene_settings.h"
 #include "game_clock.h"
+#include "scene_save.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -92,6 +93,33 @@ JNIEXPORT jfloat JNICALL Java_org_easyrpg_player_player_EasyRpgPlayerActivity_ge
   (JNIEnv *, jclass)
 {
 	return Game_Clock::GetGameSpeedFactor();
+}
+JNIEXPORT void JNICALL Java_org_easyrpg_player_player_EasyRpgPlayerActivity_loadSaveState
+  (JNIEnv *env, jclass, jstring path, jint jsaveId)
+{
+	const char* cStr = env->GetStringUTFChars(path, NULL);
+	std::string save_name = std::string(cStr);
+	int save_id = jsaveId + 1;
+	EpAndroid::schedule([](std::string path, int id) {
+		Player::LoadSavegame(path, id);
+	},save_name,save_id);
+	env->ReleaseStringUTFChars(path, cStr);
+}
+JNIEXPORT void JNICALL Java_org_easyrpg_player_player_EasyRpgPlayerActivity_saveSaveState
+  (JNIEnv *env, jclass, jstring path, jint jsaveId)
+{
+	const char* cStr = env->GetStringUTFChars(path, NULL);
+	std::string save_name = std::string(cStr);
+	int save_id = jsaveId + 1;
+	EpAndroid::schedule([](std::string path, int id) {
+		auto save_stream = FileFinder::Save().OpenOutputStream(path);
+
+		if (!save_stream) {
+			return;
+		}
+        bool success = Scene_Save::Save(save_stream, id);
+	},save_name,save_id);
+	env->ReleaseStringUTFChars(path, cStr);
 }
 //endregion
 #ifdef __cplusplus
