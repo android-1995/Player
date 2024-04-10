@@ -67,6 +67,16 @@ JNIEXPORT void JNICALL Java_org_easyrpg_player_player_EasyRpgPlayerActivity_resu
 {
 	Player::Resume();
 }
+JNIEXPORT void JNICALL Java_org_easyrpg_player_player_EasyRpgPlayerActivity_switchWalkThroughWalls
+  (JNIEnv *, jclass, jboolean enabled)
+{
+	Player::through_flag_25 = enabled;
+}
+JNIEXPORT jboolean JNICALL Java_org_easyrpg_player_player_EasyRpgPlayerActivity_getSwitchWalkThroughWalls
+  (JNIEnv *, jclass)
+{
+	return Player::through_flag_25;
+}
 //endregion
 #ifdef __cplusplus
 }

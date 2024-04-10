@@ -137,6 +137,11 @@ namespace Player {
 	int rng_seed = -1;
 	Game_ConfigPlayer player_config;
 	Game_ConfigGame game_config;
+
+	//region 修改
+	//穿墙
+	bool through_flag_25;
+	//endregion
 #ifdef EMSCRIPTEN
 	std::string emscripten_game_name;
 #endif

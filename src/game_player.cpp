@@ -321,7 +321,7 @@ void Game_Player::UpdateNextMovementAction() {
 			break;
 	}
 	if (move_dir >= 0) {
-		SetThrough((Player::debug_flag && Input::IsPressed(Input::DEBUG_THROUGH)) || data()->move_route_through);
+		SetThrough((Player::debug_flag && (Input::IsPressed(Input::DEBUG_THROUGH) || Player::through_flag_25)) || data()->move_route_through);
 		Move(move_dir);
 		ResetThrough();
 		if (IsStopping()) {

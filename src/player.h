@@ -410,6 +410,9 @@ namespace Player {
 	/** game specific configuration */
 	extern Game_ConfigGame game_config;
 
+	//region 修改
+	extern bool through_flag_25;
+	//endregion
 #ifdef EMSCRIPTEN
 	/** Name of game emscripten uses */
 	extern std::string emscripten_game_name;
